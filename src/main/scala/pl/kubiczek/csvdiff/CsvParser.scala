@@ -2,12 +2,26 @@ package pl.kubiczek.csvdiff
 
 import java.io._
 
+/**
+ * This component provides parsers for input files.
+ * 
+ * @author kubiczek
+ */
 class CsvParser(config: Configuration) {
   
+  /**
+   * Parses the input files specified by [[pl.kubiczek.csvdiff.Configuration]].
+   * 
+   * @return a pair of [[pl.kubiczek.csvdiff.Table]] instances representing 
+   * actual and expected CSV files (see [[pl.kubiczek.csvdiff.Configuration]]).
+   */
   def parse() = {
 	(createTable(config.actualFile), createTable(config.expectedFile))
   }
   
+  /**
+   * dwd
+   */
   private def createTable(file: File) = {
     new Table(scala.io.Source.fromFile(file)
 				.getLines

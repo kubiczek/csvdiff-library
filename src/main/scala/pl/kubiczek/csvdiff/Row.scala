@@ -1,6 +1,10 @@
 package pl.kubiczek.csvdiff
 
-
+/**
+ * This component represents a single line in input CSV file.
+ * 
+ * @author kubiczek
+ */
 class Row(rowNr: Int, fields: Array[String], config: Configuration) {
 
   def getField(i: Int) = this.fields(i)

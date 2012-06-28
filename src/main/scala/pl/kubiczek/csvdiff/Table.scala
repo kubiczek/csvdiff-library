@@ -1,5 +1,11 @@
 package pl.kubiczek.csvdiff
 
+/**
+ * This component is an data structure for representing input CSV file. Each
+ * line of the file is represented by [[pl.kubiczek.csvdiff.Row]] instance.
+ * 
+ * @author kubiczek
+ */
 class Table(rows: Array[Row], config: Configuration) {
 
   def getRow(i: Int) = this.rows(i)

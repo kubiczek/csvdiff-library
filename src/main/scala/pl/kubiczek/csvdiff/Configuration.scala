@@ -6,6 +6,8 @@ import java.io.File
  * 
  * Configuration instance specify all user-configurable parameters which
  * are used at runtime by the csvdiff framework.
+ * 
+ * @author kubiczek
  */
 class Configuration {
   /**

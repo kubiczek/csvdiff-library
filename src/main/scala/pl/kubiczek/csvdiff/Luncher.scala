@@ -2,13 +2,15 @@ package pl.kubiczek.csvdiff
 
 /**
  * Factory for [[pl.kubiczek.csvdiff.Luncher]] instances.
+ * 
+ * @author kubiczek
  */
 object Luncher {
   /**
    * Create luncher with a given configuration.
    * 
    * @param config the configuration of the csvdiff framework
-   * @return a new Luncher instance 
+   * @return a new [[pl.kubiczek.csvdiff.Luncher]] instance 
    */
   def apply(config: Configuration) = {
     val parser = new CsvParser(config)
@@ -19,6 +21,8 @@ object Luncher {
 /**
  * This class is used to lunch the csvdiff framework. Client code should 
  * call run() method.
+ * 
+ * @author kubiczek
  */
 class Luncher(config: Configuration, parser: CsvParser) {
   /**
