@@ -9,8 +9,8 @@ object Luncher {
   /**
    * Create luncher with a given configuration.
    * 
-   * @param config the configuration of the csvdiff framework
-   * @return a new [[pl.kubiczek.csvdiff.Luncher]] instance 
+   * @param config the configuration of the csvdiff framework.
+   * @return a new [[pl.kubiczek.csvdiff.Luncher]] instance.
    */
   def apply(config: Configuration) = {
     val parser = new CsvParser(config)
@@ -29,7 +29,7 @@ class Luncher(config: Configuration, parser: CsvParser) {
    * Runs csvdiff framework.
    * 
    * @return a list of [[pl.kubiczek.csvdiff.DiffResult]] instances representing
-   * differences in compared files
+   * differences in compared files.
    */
   def run() = {
     val (actualTable, expectedTable) = parser.parse()

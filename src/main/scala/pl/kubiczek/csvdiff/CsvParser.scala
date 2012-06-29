@@ -20,7 +20,10 @@ class CsvParser(config: Configuration) {
   }
   
   /**
-   * dwd
+   * Creates a new [[pl.kubiczek.csvdiff.Table]] instance by parsing input CSV file.
+   * 
+   * @param input file in CSV format.
+   * @return a new [[pl.kubiczek.csvdiff.Table]] instance.
    */
   private def createTable(file: File) = {
     new Table(scala.io.Source.fromFile(file)

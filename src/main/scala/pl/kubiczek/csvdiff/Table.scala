@@ -7,13 +7,33 @@ package pl.kubiczek.csvdiff
  * @author kubiczek
  */
 class Table(rows: Array[Row], config: Configuration) {
-
+  /**
+   * Gets the single row from this table.
+   * 
+   * @param i number of the row.
+   */
   def getRow(i: Int) = this.rows(i)
-  
+  /**
+   * Gets all rows of this table.
+   * 
+   * @return an array of the rows.
+   */
   def getRows = this.rows
-  
+  /**
+   * The length of the table.
+   * 
+   * @return the number of rows in this table.
+   */
   def length = this.rows.length
-  
+  /**
+   * Compares this table with another table. Row-by-row (by default) 
+   * or key-by-key (if key columns are defined) algorithm of comparison 
+   * should be applied. This depends on `keyColumns` variable of [[pl.kubiczek.csvdiff.Configuration]].
+   * 
+   * @param that the other table.
+   * @return a list of [[pl.kubiczek.csvdiff.DiffResult]] representing differences
+   * in comparison. Empty list is returned if no differences found.
+   */
   def compare(that: Table) = {
     if(config.keyColumns.isEmpty)
       this.compareRowByRow(that)
