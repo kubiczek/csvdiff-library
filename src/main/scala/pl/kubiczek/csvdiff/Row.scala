@@ -3,6 +3,10 @@ package pl.kubiczek.csvdiff
 /**
  * This component represents a single line in input CSV file.
  * 
+ * rowNr row number in table
+ * fields array with tokenized values for given row number
+ * config the configuration of the cvsdiff framework
+ * 
  * @author kubiczek
  */
 class Row(rowNr: Int, fields: Array[String], config: Configuration) {
