@@ -15,6 +15,8 @@ class Row(rowNr: Int, fields: Array[String], config: Configuration) {
   
   def getFields = this.fields
   
+  def getRowNumber = this.rowNr
+  
   def length = this.fields.length
   
   def key = config.keyColumns.map(getField(_))
