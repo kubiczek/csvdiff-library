@@ -45,3 +45,5 @@ case class UnexpectedRow(actual: Row) extends DiffResult {
             
   def toXml = <unexpectedRow expectedLine={actual.getRowNumber.toString} />
 }
+
+// TODO case class for unique constraint violation
