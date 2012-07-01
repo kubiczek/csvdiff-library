@@ -1,7 +1,10 @@
 package pl.kubiczek.csvdiff
 
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 import org.scalatest.FunSuite
 
+@RunWith(classOf[JUnitRunner])
 class RowTest extends FunSuite {
   
   test("test method getField") {
@@ -13,8 +16,8 @@ class RowTest extends FunSuite {
     var row = new Row(10, fields, config)
     
     assert(row.getField(0) === "f1")
-    assert(row.getField(0) === "f2")
-    assert(row.getField(0) === "f3")
+    assert(row.getField(1) === "f2")
+    assert(row.getField(2) === "f3")
   }
 
 }
