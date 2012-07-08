@@ -1,4 +1,5 @@
 package pl.kubiczek.csvdiff
+import java.io.File
 
 /**
  * This component is an data structure for representing input CSV file. Each
@@ -55,17 +56,26 @@ class Table(rows: Array[Row], config: Configuration) {
   private def compareKeyByKey(that: Table): List[DiffResult] = {
     val thisMap = indexing(this.getRows)
     val thatMap = indexing(that.getRows)
-    // TODO handling of unique key violation, i.e. thisMap(key).length > 1
-  
-    thisMap.keys.flatMap(key => thatMap.get(key) match {
-        case Some(rows) => thisMap(key)(0).compare(rows(0)).toList
-        case None => List(UnexpectedRow(thisMap(key)(0))) // TODO or ExpectedRowNotExist
-      }
-    ).toList
+    val violations = checkUniqueKeyViolation(thisMap, config.actualFile). // TODO or expected file
+                       ++ (checkUniqueKeyViolation(thatMap, config.expectedFile))
+                       
+    if(violations.isEmpty){ // compare rows if keys are unique
+      thisMap.keys.flatMap(key => thatMap.get(key) match {
+          case Some(rows) => thisMap(key)(0).compare(rows(0)).toList
+          case None => List(UnexpectedRow(thisMap(key)(0))) // TODO or ExpectedRowNotExist
+        }
+      ).toList            
+    } else { // otherwise returns list of unique key violations
+      violations.toList  
+    }
+
   }
   
   private def indexing(rows: Array[Row]) = {
     rows.groupBy(row => config.keyColumns.map(row.getField(_)))
   }
+  
+  private def checkUniqueKeyViolation(rowsByKey: Map[List[String], Array[Row]], file: File) =
+    for((key, value) <- rowsByKey if value.length > 1) yield UniqueKeyViolation(file, key, value.toList)
 
 }

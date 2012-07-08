@@ -1,4 +1,5 @@
 package pl.kubiczek.csvdiff
+import java.io.File
 
 abstract sealed class DiffResult {
   def toXml(): scala.xml.Elem
@@ -46,4 +47,18 @@ case class UnexpectedRow(actual: Row) extends DiffResult {
   def toXml = <unexpectedRow expectedLine={actual.getRowNumber.toString} />
 }
 
-// TODO case class for unique constraint violation
+case class UniqueKeyViolation(file: File, key: List[String], rows: List[Row]) extends DiffResult {
+  
+  override def toString = new StringBuffer()
+           .append("Unique key violation in file %s\n")
+           .append("  lines with the same key > %s <\n")
+           .append("    %s\n\n")
+           .append("-----------------------------------------------\n").toString()
+            .format(file.toString(),
+                key.toString(),
+                rows.toString())
+  
+  def toXml = <uniqueKeyViolation file={file.toString()}
+                  key={key.toString()}
+                  rows={rows.toString()} />
+}
