@@ -26,13 +26,20 @@ class CsvParser(config: Configuration) {
    * @return a new [[pl.kubiczek.csvdiff.Table]] instance.
    */
   private def createTable(file: File) = {
-    new Table(scala.io.Source.fromFile(file)
-				.getLines
-				.map(_.split(config.delimiter))
-				.toArray
-				.zipWithIndex
-				.map(x => new Row(x._2, x._1, config)),
-			  config)
+    val rows = scala.io.Source.fromFile(file)
+          .getLines
+          .map(_.split(config.delimiter))
+          .toArray
+          .zipWithIndex
+          .map(x => new Row(x._2, x._1, config))
+          
+    val columns = (1 to  rows(0).length toList)
+          .map(columnNr => rows.map(_.getField(columnNr)))
+          .toArray
+          .zipWithIndex
+          .map(x => new Column(x._2, x._1, config))
+    
+    new Table(rows, columns, config)
   }
 
 }

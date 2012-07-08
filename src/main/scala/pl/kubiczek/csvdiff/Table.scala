@@ -7,7 +7,7 @@ import java.io.File
  * 
  * @author kubiczek
  */
-class Table(rows: Array[Row], config: Configuration) {
+class Table(rows: Array[Row], columns: Array[Column], config: Configuration) {
   /**
    * Gets the single row from this table.
    * 
@@ -20,6 +20,18 @@ class Table(rows: Array[Row], config: Configuration) {
    * @return an array of the rows.
    */
   def getRows = this.rows
+  /**
+   * Gets the single column from this table.
+   * 
+   * @param i number of the column.
+   */
+  def getColumn(i: Int) = this.columns(i)
+  /**
+   * Gets all columns of this table.
+   * 
+   * @return an array of the columns.
+   */
+  def getColumns = this.columns
   /**
    * The length of the table.
    * 
