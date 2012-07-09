@@ -36,4 +36,9 @@ class Configuration {
    * and row-by-row algorithm of comparison shall be applied.
    */
   var keyColumns: List[Int] = List()
+  /**
+   * Flag indicating if the first line of input CSV file contains names of the columns.
+   * By default the flag is set to false.
+   */
+  var isColumnName = false
 }
