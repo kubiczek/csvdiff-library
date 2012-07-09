@@ -10,7 +10,8 @@ class RowTest extends FunSuite {
   test("test method getField") {
     var config = new Configuration
     val fields = Array("f1", "f2", "f3")
-    var row = new Row(10, fields, config)
+    val metadata = Array(new ColumnMetadata, new ColumnMetadata, new ColumnMetadata)
+    var row = new Row(10, fields, metadata, config)
     
     assert(row.getField(0) === "f1")
     assert(row.getField(1) === "f2")
