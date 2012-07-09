@@ -2,12 +2,46 @@ package pl.kubiczek.csvdiff
 import java.io.File
 
 /**
+ * Factory for [[pl.kubiczek.csvdiff.Table]] instances.
+ * 
+ * @author kubiczek
+ */
+object Table {
+  /**
+   * Creates a new [[pl.kubiczek.csvdiff.Table]] instance by parsing input CSV file.
+   * 
+   * @param input file in CSV format.
+   * @param config the configuration of the csvdiff framework.
+   * @return a new [[pl.kubiczek.csvdiff.Table]] instance.
+   */
+  def apply(file: File, config: Configuration) = {
+    val lines = scala.io.Source.fromFile(file).getLines.toArray
+    // creates an array of column's meta-data
+    val metadata = lines(0)
+        .split(config.delimiter)
+        .map(name => new ColumnMetadata(if(config.isColumnName) Some(name) else None))
+    // creates an array of rows
+    val rows = lines
+          .map(_.split(config.delimiter))
+          .zipWithIndex
+          .map(x => new Row(x._2, x._1, metadata, config))
+    // creates an array of columns
+    val columns = (1 to  rows(0).length toArray)
+          .map(columnNr => rows.map(_.getField(columnNr)))
+          .zipWithIndex
+          .map(x => new Column(x._2, x._1, metadata(x._2), config))
+    // creates and returns a new instance of Table
+    new Table(rows, columns, config)
+  }
+}
+
+/**
  * This component is an data structure for representing input CSV file. Each
  * line of the file is represented by [[pl.kubiczek.csvdiff.Row]] instance.
  * 
  * @author kubiczek
  */
-class Table(rows: Array[Row], config: Configuration) {
+class Table(rows: Array[Row], columns: Array[Column], config: Configuration) {
   /**
    * Gets the single row from this table.
    * 
@@ -20,6 +54,18 @@ class Table(rows: Array[Row], config: Configuration) {
    * @return an array of the rows.
    */
   def getRows = this.rows
+  /**
+   * Gets the single column from this table.
+   * 
+   * @param i number of the column.
+   */
+  def getColumn(i: Int) = this.columns(i)
+  /**
+   * Gets all columns of this table.
+   * 
+   * @return an array of the columns.
+   */
+  def getColumns = this.columns
   /**
    * The length of the table.
    * 
@@ -77,5 +123,4 @@ class Table(rows: Array[Row], config: Configuration) {
   
   private def checkUniqueKeyViolation(rowsByKey: Map[List[String], Array[Row]], file: File) =
     for((key, value) <- rowsByKey if value.length > 1) yield UniqueKeyViolation(file, key, value.toList)
-
 }

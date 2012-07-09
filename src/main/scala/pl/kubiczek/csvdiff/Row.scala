@@ -9,13 +9,15 @@ package pl.kubiczek.csvdiff
  * 
  * @author kubiczek
  */
-class Row(rowNr: Int, fields: Array[String], config: Configuration) {
+class Row(rowNr: Int, fields: Array[String], metadata: Array[ColumnMetadata], config: Configuration) {
 
   def getField(i: Int) = this.fields(i)
   
   def getFields = this.fields
   
   def getRowNumber = this.rowNr
+  
+  def getMetadata(i: Int) = this.metadata(i)
   
   def length = this.fields.length
   
