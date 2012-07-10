@@ -4,8 +4,8 @@
   <artifactId>csvdiff-library</artifactId>
   <version>0.1-SNAPSHOT</version>
   <name>${project.artifactId}</name>
-  <description>My wonderfull scala app</description>
-  <inceptionYear>2010</inceptionYear>
+  <description>csvdiff-library is a scala-based API used for comparison of files in CSV format</description>
+  <inceptionYear>2012</inceptionYear>
   <licenses>
     <license>
       <name>My License</name>
@@ -60,7 +60,7 @@
     </dependency>
     <dependency>
       <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_2.9.0</artifactId>
+      <artifactId>scalatest_2.9.1</artifactId>
       <version>1.8</version>
       <scope>test</scope>
     </dependency>
@@ -76,6 +76,7 @@
         <version>2.15.0</version>
         <executions>
           <execution>
+            <id>main-scalac</id>
             <goals>
               <goal>compile</goal>
               <goal>testCompile</goal>
@@ -107,4 +108,59 @@
       </plugin>
     </plugins>
   </build>
+  
+  <profiles>
+    <profile>
+      <id>coverage</id>
+      <repositories>
+        <repository>
+          <id>scct repository</id>
+          <url>http://mtkopone.github.com/scct/maven-repo</url>
+        </repository>
+      </repositories>
+      <dependencies>
+        <dependency>
+          <groupId>reaktor</groupId>
+          <artifactId>scct_2.9.1</artifactId>
+          <version>0.1-SNAPSHOT</version>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.6</version>
+            <configuration>
+              <systemPropertyVariables>
+                <scct.project.name>${project.name}</scct.project.name>
+                <scct.coverage.file>${project.build.outputDirectory}/coverage.data</scct.coverage.file>
+                <scct.report.dir>${project.build.directory}/coverage-report</scct.report.dir>
+                <scct.source.dir>${project.build.sourceDirectory}</scct.source.dir>
+              </systemPropertyVariables>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.scala-tools</groupId>
+            <artifactId>maven-scala-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>main-scalac</id>
+                <configuration>
+                  <compilerPlugins>
+                    <compilerPlugin>
+                      <groupId>reaktor</groupId>
+                      <artifactId>scct_2.9.1</artifactId>
+                      <version>0.1-SNAPSHOT</version>
+                    </compilerPlugin>
+                  </compilerPlugins>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>        
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+		
 </project>
