@@ -3,15 +3,15 @@ package pl.kubiczek.csvdiff
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.FunSuite
+import org.scalatest.mock.EasyMockSugar
 
 @RunWith(classOf[JUnitRunner])
-class RowTest extends FunSuite {
+class RowTest extends FunSuite with EasyMockSugar {
   
-  test("test method getField") {
-    var config = new Configuration
-    val fields = Array("f1", "f2", "f3")
-    val metadata = Array(new ColumnMetadata, new ColumnMetadata, new ColumnMetadata)
-    var row = new Row(10, fields, metadata, config)
+  test("getField is called on row") {
+    val row = new Row(10, Array("f1", "f2", "f3"), 
+         Array(mock[ColumnMetadata], mock[ColumnMetadata], mock[ColumnMetadata]),
+         mock[Configuration])
     
     assert(row.getField(0) === "f1")
     assert(row.getField(1) === "f2")
