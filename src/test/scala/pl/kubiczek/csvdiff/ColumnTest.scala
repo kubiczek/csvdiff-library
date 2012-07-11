@@ -43,7 +43,7 @@ class ColumnTest extends FunSuite with EasyMockSugar {
   test("getMetadata is called on column") {
     val metadata = mock[ColumnMetadata]
     val column = new Column(7, Array("a"), metadata, mock[Configuration])
-    
+
     assert(column.getMetadata === metadata)
     assert(column.length === 1)
   }
