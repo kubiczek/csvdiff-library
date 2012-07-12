@@ -19,7 +19,7 @@ object Table {
     // creates an array of column's meta-data
     val metadata = lines(0)
         .split(config.delimiter)
-        .map(name => new ColumnMetadata(if(config.isColumnName) Some(name) else None))
+        .map(name => new ColumnMetadata(if(config.isColumnName) Some(name) else None, pl.kubiczek.csvdiff.String)) // TODO column type configuration
     // creates an array of rows
     val rows = lines
           .map(_.split(config.delimiter))

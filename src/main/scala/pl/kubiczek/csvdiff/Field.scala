@@ -10,17 +10,12 @@ object Field {
    * Creates field with a given value and type.
    * 
    * @param value string representation of the value.
-   * @param type the type of the value. String representation of the value
-   * must be converted to this type.
+   * @param  transformer TODO
    * @return a new [[pl.kubiczek.csvdiff.Field]] instance.
    */
-  def apply(value: String, columnType: ColumnType) =
-    columnType match {
-      case String => new Field(value)
-      case Integer => new Field(value.toInt)
-      case Long => new Field(value.toLong)
-      case Double => new Field(value.toDouble)
-    }
+  def apply[T](value: String, transformer: String => T) = new Field(transformer(value))
+  
+  def apply[T](value: String) = new Field(value)
 }
 
 /**
