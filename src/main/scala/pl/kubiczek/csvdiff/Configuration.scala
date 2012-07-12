@@ -9,7 +9,7 @@ import java.io.File
  * 
  * @author kubiczek
  */
-class Configuration {
+trait Configuration {
   /**
    * Character used to separate values in CSV files. By default the values are
    * comma-separated.
@@ -42,3 +42,9 @@ class Configuration {
    */
   var isColumnName = false
 }
+
+/**
+ * Client can use this component to access configuration through imports (see Scala's
+ * Selfless Trait Pattern). For mixin composition use Configuration trait.
+ */
+object Configuration extends Configuration

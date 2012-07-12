@@ -6,7 +6,7 @@ import java.io.File
  * 
  * @author kubiczek
  */
-object Table {
+object Table extends Configuration{
   /**
    * Creates a new [[pl.kubiczek.csvdiff.Table]] instance by parsing input CSV file.
    * 
@@ -14,24 +14,24 @@ object Table {
    * @param config the configuration of the csvdiff framework.
    * @return a new [[pl.kubiczek.csvdiff.Table]] instance.
    */
-  def apply(file: File, config: Configuration) = {
+  def apply(file: File) = {
     val lines = scala.io.Source.fromFile(file).getLines.toArray
     // creates an array of column's meta-data
     val metadata = lines(0)
-        .split(config.delimiter)
-        .map(name => new ColumnMetadata(if(config.isColumnName) Some(name) else None, pl.kubiczek.csvdiff.String)) // TODO column type configuration
+        .split(delimiter)
+        .map(name => new ColumnMetadata(if(isColumnName) Some(name) else None, pl.kubiczek.csvdiff.String)) // TODO column type configuration
     // creates an array of rows
     val rows = lines
-          .map(_.split(config.delimiter))
+          .map(_.split(delimiter))
           .zipWithIndex
-          .map(x => new Row(x._2, x._1, metadata, config))
+          .map(x => new Row(x._2, x._1, metadata))
     // creates an array of columns
     val columns = (1 to  rows(0).length toArray)
           .map(columnNr => rows.map(_.getField(columnNr)))
           .zipWithIndex
-          .map(x => new Column(x._2, x._1, metadata(x._2), config))
+          .map(x => new Column(x._2, x._1, metadata(x._2)))
     // creates and returns a new instance of Table
-    new Table(rows, columns, config)
+    new Table(rows, columns)
   }
 }
 
@@ -41,7 +41,7 @@ object Table {
  * 
  * @author kubiczek
  */
-class Table(rows: Array[Row], columns: Array[Column], config: Configuration) {
+class Table(rows: Array[Row], columns: Array[Column]) extends Configuration {
   /**
    * Gets the single row from this table.
    * 
@@ -82,7 +82,7 @@ class Table(rows: Array[Row], columns: Array[Column], config: Configuration) {
    * in comparison. Empty list is returned if no differences found.
    */
   def compare(that: Table) = {
-    if(config.keyColumns.isEmpty)
+    if(keyColumns.isEmpty)
       this.compareRowByRow(that)
     else
       this.compareKeyByKey(that)
@@ -102,8 +102,8 @@ class Table(rows: Array[Row], columns: Array[Column], config: Configuration) {
   private def compareKeyByKey(that: Table): List[DiffResult] = {
     val thisMap = indexing(this.getRows)
     val thatMap = indexing(that.getRows)
-    val violations = checkUniqueKeyViolation(thisMap, config.actualFile). // TODO or expected file
-                       ++ (checkUniqueKeyViolation(thatMap, config.expectedFile))
+    val violations = checkUniqueKeyViolation(thisMap, actualFile). // TODO or expected file
+                       ++ (checkUniqueKeyViolation(thatMap, expectedFile))
                        
     if(violations.isEmpty){ // compare rows if keys are unique
       thisMap.keys.flatMap(key => thatMap.get(key) match {
@@ -118,7 +118,7 @@ class Table(rows: Array[Row], columns: Array[Column], config: Configuration) {
   }
   
   private def indexing(rows: Array[Row]) = {
-    rows.groupBy(row => config.keyColumns.map(row.getField(_)))
+    rows.groupBy(row => keyColumns.map(row.getField(_)))
   }
   
   private def checkUniqueKeyViolation(rowsByKey: Map[List[String], Array[Row]], file: File) =

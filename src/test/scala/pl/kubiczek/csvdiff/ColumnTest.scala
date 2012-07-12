@@ -9,7 +9,7 @@ import org.scalatest.mock.EasyMockSugar
 class ColumnTest extends FunSuite with EasyMockSugar {
   
   test("getField is called on column") {
-    val column = new Column(5, Array("a", "b", "c"), mock[ColumnMetadata], mock[Configuration])
+    val column = new Column(5, Array("a", "b", "c"), mock[ColumnMetadata])
     
     assert(column.getField(0) === "a")
     assert(column.getField(1) === "b")
@@ -18,7 +18,7 @@ class ColumnTest extends FunSuite with EasyMockSugar {
   }
   
   test("getField is called on column with index out of bound") {
-    val column = new Column(5, Array("a", "b", "c"), mock[ColumnMetadata], mock[Configuration])
+    val column = new Column(5, Array("a", "b", "c"), mock[ColumnMetadata])
     
     intercept[ArrayIndexOutOfBoundsException] {
     	column.getField(3)      
@@ -27,14 +27,14 @@ class ColumnTest extends FunSuite with EasyMockSugar {
   }
   
   test("getFields is called on column") {
-    val column = new Column(6, Array("a", "b"), mock[ColumnMetadata], mock[Configuration])
+    val column = new Column(6, Array("a", "b"), mock[ColumnMetadata])
     
     assert(column.getFields === Array("a", "b"))
     assert(column.length === 2)
   }
   
   test("getColumnNumber is called on column") {
-    val column = new Column(7, Array("a"), mock[ColumnMetadata], mock[Configuration])
+    val column = new Column(7, Array("a"), mock[ColumnMetadata])
     
     assert(column.getColumnNumber === 7)
     assert(column.length === 1)
@@ -42,7 +42,7 @@ class ColumnTest extends FunSuite with EasyMockSugar {
   
   test("getMetadata is called on column") {
     val metadata = mock[ColumnMetadata]
-    val column = new Column(7, Array("a"), metadata, mock[Configuration])
+    val column = new Column(7, Array("a"), metadata)
 
     assert(column.getMetadata === metadata)
     assert(column.length === 1)
