@@ -1,5 +1,7 @@
 package pl.kubiczek.csvdiff
 
+import pl.kubiczek.csvdiff.PredefinedConverters._
+
 /**
  * Factory for [[pl.kubiczek.csvdiff.Field]] instances.
  * 
@@ -13,9 +15,9 @@ object Field {
    * @param converter TODO
    * @return a new [[pl.kubiczek.csvdiff.Field]] instance.
    */
-  def apply[T](value: String, converter: String => T) = new Field(converter(value))
+  def apply[T](value: String, converter: Converter[T]) = new Field(converter.convert(value))
   
-  def apply[T](value: String) = new Field(value)
+  //def apply[T](value: String) = new Field(value)
 }
 
 /**
