@@ -12,7 +12,7 @@ object Field {
    * Creates field with a given value and type.
    * 
    * @param value string representation of the value.
-   * @param converter TODO
+   * @param converter TODO scaladoc
    * @return a new [[pl.kubiczek.csvdiff.Field]] instance.
    */
   def apply[T](value: String, converter: Converter[T]) = new Field(converter.convert(value))

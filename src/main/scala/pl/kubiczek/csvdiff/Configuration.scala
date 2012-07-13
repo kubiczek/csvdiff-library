@@ -41,6 +41,8 @@ trait Configuration {
    * By default the flag is set to false.
    */
   var isColumnName = false
+  // TODO column type
+  var columnTypes: Option[Array[Class[_]]] = None
 }
 
 /**
