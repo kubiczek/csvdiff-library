@@ -49,14 +49,14 @@ class FieldTest extends FunSuite with EasyMockSugar {
     assert((t == t) === true)
   }
   
-  test("field type matters") {
+  test("field type doesn't matter") {
     val x = new Field(5)
     val y = new Field(5L)
     val z = new Field(5.0)
     
-    assert((x == y) === false)
-    assert((x == z) === false)
-    assert((y == z) === false)
+    assert((x == y) === true)
+    assert((x == z) === true)
+    assert((y == z) === true)
     assert((z == z) === true)
   }
 }

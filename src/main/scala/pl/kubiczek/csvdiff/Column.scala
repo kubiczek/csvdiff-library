@@ -1,6 +1,6 @@
 package pl.kubiczek.csvdiff
 
-class Column(columnNr: Int, fields: Array[String], metadata: ColumnMetadata) {
+class Column(columnNr: Int, fields: Array[_ <: Field[_]], metadata: ColumnMetadata) {
 
   def getField(i: Int) = this.fields(i)
   

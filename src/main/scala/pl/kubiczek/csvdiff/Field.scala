@@ -10,10 +10,10 @@ object Field {
    * Creates field with a given value and type.
    * 
    * @param value string representation of the value.
-   * @param  transformer TODO
+   * @param converter TODO
    * @return a new [[pl.kubiczek.csvdiff.Field]] instance.
    */
-  def apply[T](value: String, transformer: String => T) = new Field(transformer(value))
+  def apply[T](value: String, converter: String => T) = new Field(converter(value))
   
   def apply[T](value: String) = new Field(value)
 }
@@ -33,5 +33,7 @@ class Field[T](value: T) {
    * @param that the other field
    * @return true iff the fields are equal.
    */
-  def ==(that: Field[T]) = this.getValue == that.getValue
+  def ==(that: Field[_]) = this.getValue == that.getValue
+  
+  override def toString = value.toString
 }

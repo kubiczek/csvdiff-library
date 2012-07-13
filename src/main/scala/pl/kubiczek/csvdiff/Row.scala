@@ -9,7 +9,7 @@ package pl.kubiczek.csvdiff
  * 
  * @author kubiczek
  */
-class Row(rowNr: Int, fields: Array[String], metadata: Array[ColumnMetadata]) extends Configuration {
+class Row(rowNr: Int, fields: Array[_ <: Field[_]], metadata: Array[ColumnMetadata]) extends Configuration {
 
   def getField(i: Int) = this.fields(i)
   
