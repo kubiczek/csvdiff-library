@@ -4,8 +4,8 @@ package pl.kubiczek.csvdiff
  * This component represents a single line in input CSV file.
  * 
  * rowNr row number in table
- * fields array with tokenized values for given row number
- * config the configuration of the cvsdiff framework
+ * fields array with [[pl.kubiczek.csvdiff.Field]] values in this row
+ * metadata array with [[pl.kubiczek.csvdiff.ColumnMetadata]] in this row
  * 
  * @author kubiczek
  */
