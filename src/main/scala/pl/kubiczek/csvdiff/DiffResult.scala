@@ -20,10 +20,10 @@ case class NoMatchValue(actual: Row, expected:Row, columnNr: Int) extends DiffRe
                 actual.getField(columnNr),
                 expected.getField(columnNr))
                 
-  def toXml = <noMatchValue actualLine={actual.getRowNumber.toString} 
+  def toXml = <noMatchValue actualLine={actual.getRowNumber.toString}
                   expectedLine={expected.getRowNumber.toString}
-                  actualValue={actual.getField(columnNr)}
-                  expectedValue={expected.getField(columnNr)}
+                  actualValue={actual.getField(columnNr).toString}
+                  expectedValue={expected.getField(columnNr).toString}
                   columnNr={columnNr.toString} />
 }
 
@@ -47,7 +47,7 @@ case class UnexpectedRow(actual: Row) extends DiffResult {
   def toXml = <unexpectedRow expectedLine={actual.getRowNumber.toString} />
 }
 
-case class UniqueKeyViolation(file: File, key: List[String], rows: List[Row]) extends DiffResult {
+case class UniqueKeyViolation(file: File, key: List[Field[_]], rows: List[Row]) extends DiffResult {
   
   override def toString = new StringBuffer()
            .append("Unique key violation in file %s\n")
