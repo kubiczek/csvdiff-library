@@ -10,22 +10,27 @@ class PredefinedConvertersTest extends FunSuite with EasyMockSugar {
 
   test("string converter") {
     assert(PredefinedConverters(classOf[String]).convert("test") === "test")
+    assert(PredefinedConverters.stringConverter.convert("test") === "test")
   }
   
   test("int converter") {
     assert(PredefinedConverters(classOf[Int]).convert("123") === 123)
+    assert(PredefinedConverters.intConverter.convert("123") === 123)
   }
   
   test("long converter") {
     assert(PredefinedConverters(classOf[Long]).convert("123412341234") === 123412341234L)
+    assert(PredefinedConverters.longConverter.convert("123412341234") === 123412341234L)
   }
   
   test("float converter") {
     assert(PredefinedConverters(classOf[Float]).convert("3.14") === 3.14f)
+    assert(PredefinedConverters.floatConverter.convert("3.14") === 3.14f)
   }
   
   test("double converter") {
     assert(PredefinedConverters(classOf[Double]).convert("1.23456") === 1.23456)
+    assert(PredefinedConverters.doubleConverter.convert("1.23456") === 1.23456)
   }
   
   test("different types equality") {

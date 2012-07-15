@@ -22,7 +22,7 @@ object Table extends Configuration{
     // create an array of rows
     val rows = lines
           .map(_.split(delimiter))
-          .map(_.map(Field(_, PredefinedConverters.stringConverter))) // TODO support for other types of field, converters needed
+          .map(_.map(Field(_, classOf[String]))) // TODO support for other types of field, converters needed
           .zipWithIndex
           .map(x => new Row(x._2, x._1, metadata))
     // create an array of columns

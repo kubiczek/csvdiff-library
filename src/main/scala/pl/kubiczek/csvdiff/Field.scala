@@ -16,8 +16,8 @@ object Field {
    * @return a new [[pl.kubiczek.csvdiff.Field]] instance.
    */
   def apply[T](value: String, converter: Converter[T]) = new Field(converter.convert(value))
-  
-  //def apply[T](value: String) = new Field(value)
+  // TODO scaladoc
+  def apply[T](value: String, fieldType: Class[T]) = new Field(value, PredefinedConverters(fieldType))
 }
 
 /**
@@ -26,6 +26,7 @@ object Field {
 class Field[T](value: T) {
   /**
    * Gets the value of this field.
+   * 
    * @return the value of this field
    */
   def getValue = this.value
