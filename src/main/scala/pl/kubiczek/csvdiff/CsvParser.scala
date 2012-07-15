@@ -5,7 +5,7 @@ package pl.kubiczek.csvdiff
  * 
  * @author kubiczek
  */
-class CsvParser(config: Configuration) {
+class CsvParser extends Configuration {
   /**
    * Parses the input files specified by [[pl.kubiczek.csvdiff.Configuration]].
    * 
@@ -13,6 +13,6 @@ class CsvParser(config: Configuration) {
    * actual and expected CSV files (see [[pl.kubiczek.csvdiff.Configuration]]).
    */
   def parse() = {
-	(Table(config.actualFile, config), Table(config.expectedFile, config))
+	(Table(actualFile), Table(expectedFile))
   }
 }
