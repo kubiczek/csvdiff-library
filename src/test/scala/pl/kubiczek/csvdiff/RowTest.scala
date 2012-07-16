@@ -10,7 +10,8 @@ import org.scalatest.BeforeAndAfter
 class RowTest extends FunSuite with EasyMockSugar {
   
   val metadataArray = Array(mock[ColumnMetadata], mock[ColumnMetadata], mock[ColumnMetadata])
-  var row = new Row(10, Array(new Field("f1"), new Field("f2"), new Field("f3")), metadataArray)
+  val fields = Array(new Field("f1"), new Field("f2"), new Field("f3"))
+  var row = new Row(10, fields, metadataArray)
   
   
   test("getField is called on row") {
@@ -21,7 +22,7 @@ class RowTest extends FunSuite with EasyMockSugar {
   }
   
   test("getFields is called on row") {
-    assert(row.getFields === Array(new Field("f1"), new Field("f2"), new Field("f3")))
+    assert(row.getFields === fields)
     assert(row.length === 3)
   }
   
@@ -49,12 +50,46 @@ class RowTest extends FunSuite with EasyMockSugar {
     assert(row.length === 3)
   }
   
-  /*
-  test("compare") {
-    val metadataArray = Array(mock[ColumnMetadata], mock[ColumnMetadata], mock[ColumnMetadata])
-    val row = new Row(10, Array("f1", "f2", "f3"), metadataArray, mock[Configuration])
-    val row2 = new Row(9, Array("f1", "f2", "f3"), metadataArray, mock[Configuration])
+  
+  test("compare in case rows are identical") {
+    val row2 = row
+    val result = row compare row2
     
-    assert(row.compare(row2) === List)
-  }*/
+    assert(result.length === 0)
+    assert(result === List())
+  }
+  
+  test("compare in case rows are not identical (1 difference)") {
+    val fields = Array(new Field("f1"), new Field("f2"), new Field("f13"))
+    val row2 = new Row(10, fields, metadataArray)
+    val result = row compare row2
+    assert(result.length === 1)
+    result(0) match { // result.head
+      case NoMatchValue (actual, expected, columnNr) => 
+        assert(columnNr === 2)
+        assert(actual === row)
+        assert(expected === row2)
+    } 
+    
+  }
+  
+  test("compare in case rows are not identical (2 differences)") {
+    val fields = Array(new Field("f1"), new Field("f12"), new Field("f13"))
+    val row2 = new Row(10, fields, metadataArray)
+    val result = row compare row2
+    assert(result.length === 2)
+    result.head match { // result(0)
+      case NoMatchValue (actual, expected, columnNr) => 
+        assert(columnNr === 1)
+        assert(actual === row)
+        assert(expected === row2)
+    }
+    result(1) match {
+      case NoMatchValue (actual, expected, columnNr) => 
+        assert(columnNr === 2)
+        assert(actual === row)
+        assert(expected === row2)
+    } 
+    
+  }
 }

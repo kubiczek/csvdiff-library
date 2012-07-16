@@ -38,5 +38,13 @@ class Field[T](value: T) {
    */
   def ==(that: Field[_]) = this.getValue == that.getValue
   
+  /**
+   * Compares this field with another field.
+   * 
+   * @param that the other field
+   * @return true iff the fields are not equal.
+   */
+  def !=(that: Field[_]) = this.getValue != that.getValue
+  
   override def toString = value.toString
 }
