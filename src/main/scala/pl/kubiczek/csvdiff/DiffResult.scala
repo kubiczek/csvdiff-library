@@ -1,6 +1,8 @@
 package pl.kubiczek.csvdiff
 import java.io.File
 
+trait DiffResultComponent { this: RowComponent =>
+
 abstract sealed class DiffResult {
   def toXml(): scala.xml.Elem
 }
@@ -61,4 +63,6 @@ case class UniqueKeyViolation(file: File, key: List[Field[_]], rows: List[Row]) 
   def toXml = <uniqueKeyViolation file={file.toString()}
                   key={key.toString()}
                   rows={rows.toString()} />
+}
+
 }

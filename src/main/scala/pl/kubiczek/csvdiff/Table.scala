@@ -6,7 +6,10 @@ import java.io.File
  * 
  * @author kubiczek
  */
-object Table extends Configuration{
+
+trait TableComponent { this: RowComponent with DiffResultComponent with ConfigurationComponent =>
+
+object Table {
   /**
    * Creates a new [[pl.kubiczek.csvdiff.Table]] instance by parsing input CSV file.
    * 
@@ -17,16 +20,16 @@ object Table extends Configuration{
     val lines = scala.io.Source.fromFile(file).getLines.toArray
     // create an array of column's meta-data
     val metadata = lines(0)
-        .split(delimiter)
-        .map(name => new ColumnMetadata(if(isColumnName) Some(name) else None, pl.kubiczek.csvdiff.String)) // TODO column type configuration
+        .split(config.delimiter)
+        .map(name => new ColumnMetadata(if(config.isColumnName) Some(name) else None, pl.kubiczek.csvdiff.String)) // TODO column type configuration
     // create an array of rows
     val rows = lines
-          .map(_.split(delimiter))
+          .map(_.split(config.delimiter))
           .map(_.map(Field(_, classOf[String]))) // TODO support for other types of field, converters needed
           .zipWithIndex
           .map(x => new Row(x._2, x._1, metadata))
     // create an array of columns
-    val columns = (1 to  rows(0).length toArray)
+    val columns = (1 to rows(0).length - 1 toArray)
           .map(columnNr => rows.map(_.getField(columnNr)))
           .zipWithIndex
           .map(x => new Column(x._2, x._1, metadata(x._2)))
@@ -123,4 +126,6 @@ class Table(rows: Array[Row], columns: Array[Column]) extends Configuration {
   
   private def checkUniqueKeyViolation(rowsByKey: Map[List[Field[_]], Array[Row]], file: File) =
     for((key, value) <- rowsByKey if value.length > 1) yield UniqueKeyViolation(file, key, value.toList)
+}
+
 }

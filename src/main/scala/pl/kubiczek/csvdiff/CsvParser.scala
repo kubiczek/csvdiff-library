@@ -5,7 +5,9 @@ package pl.kubiczek.csvdiff
  * 
  * @author kubiczek
  */
-class CsvParser extends Configuration {
+trait CsvParserComponent { this: ConfigurationComponent with TableComponent =>
+
+class CsvParser {
   /**
    * Parses the input files specified by [[pl.kubiczek.csvdiff.Configuration]].
    * 
@@ -13,6 +15,12 @@ class CsvParser extends Configuration {
    * actual and expected CSV files (see [[pl.kubiczek.csvdiff.Configuration]]).
    */
   def parse() = {
-	(Table(actualFile), Table(expectedFile))
+//    object Table extends TableComponent with ConfigurationComponent {
+//      val actual = Table(config.actualFile)
+//      val expected = Table(config.expectedFile)
+//    }
+    (Table(config.actualFile), Table(config.expectedFile))
   }
+}
+
 }

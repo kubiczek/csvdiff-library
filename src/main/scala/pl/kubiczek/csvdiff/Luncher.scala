@@ -1,18 +1,18 @@
 package pl.kubiczek.csvdiff
 
-/**
- * Factory for [[pl.kubiczek.csvdiff.Luncher]] instances.
- * 
- * @author kubiczek
- */
-object Luncher {
-  /**
-   * Creates luncher instance.
-   * 
-   * @return a new [[pl.kubiczek.csvdiff.Luncher]] instance.
-   */
-  def apply() = new Luncher(new CsvParser)
-}
+///**
+// * Factory for [[pl.kubiczek.csvdiff.Luncher]] instances.
+// * 
+// * @author kubiczek
+// */
+//object Luncher {
+//  /**
+//   * Creates luncher instance.
+//   * 
+//   * @return a new [[pl.kubiczek.csvdiff.Luncher]] instance.
+//   */
+//  def apply() = new Luncher(new CsvParser)
+//}
 
 /**
  * This class is used to lunch the csvdiff framework. Client code should 
@@ -20,6 +20,11 @@ object Luncher {
  * 
  * @author kubiczek
  */
+
+trait LuncherComponent { this: CsvParserComponent with TableComponent with ConfigurationComponent =>
+
+  val luncher: Luncher
+  
 class Luncher(parser: CsvParser) {
   /**
    * Runs csvdiff framework.
@@ -31,4 +36,17 @@ class Luncher(parser: CsvParser) {
     val (actualTable, expectedTable) = parser.parse()
     actualTable.compare(expectedTable)
   }
+}
+
+}
+
+object CsvDiff extends LuncherComponent 
+    with TableComponent 
+    with RowComponent 
+    with CsvParserComponent 
+    with DiffResultComponent  
+    with ConfigurationComponent {
+  
+  val config = new Configuration
+  val luncher = new Luncher(new CsvParser)
 }

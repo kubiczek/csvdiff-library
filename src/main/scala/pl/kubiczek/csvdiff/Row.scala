@@ -9,7 +9,10 @@ package pl.kubiczek.csvdiff
  * 
  * @author kubiczek
  */
-class Row(rowNr: Int, fields: Array[_ <: Field[_]], metadata: Array[ColumnMetadata]) extends Configuration {
+
+trait RowComponent { this: DiffResultComponent with ConfigurationComponent =>
+  
+class Row(rowNr: Int, fields: Array[_ <: Field[_]], metadata: Array[ColumnMetadata]) {
 
   def getField(i: Int) = this.fields(i)
   
@@ -21,15 +24,17 @@ class Row(rowNr: Int, fields: Array[_ <: Field[_]], metadata: Array[ColumnMetada
   
   def length = this.fields.length
   
-  def key = keyColumns.map(getField(_))
+  def key = config.keyColumns.map(getField(_))
   
   def compare(that: Row) = {
     this.getFields.zip(that.getFields)
     	.zipWithIndex // array of ((actualValue, expectedValue), columnNr)
-    	.filter(x => !unimportantColumns.contains(x._2)) //unimportant columns are filtered out
+    	.filter(x => !config.unimportantColumns.contains(x._2)) //unimportant columns are filtered out
       	.filter(x => x._1._1 != x._1._2) // array filtered by actualValue != expectedValue
       	.map(x => NoMatchValue(this, that, x._2))
       	.toList
   }
+
+}
 
 }
