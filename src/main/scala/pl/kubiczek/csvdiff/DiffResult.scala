@@ -3,66 +3,60 @@ import java.io.File
 
 trait DiffResultComponent { this: RowComponent =>
 
-abstract sealed class DiffResult {
-  def toXml(): scala.xml.Elem
-}
+  abstract sealed class DiffResult {
+    def toXml(): scala.xml.Elem
+  }
 
-case class NoMatchValue(actual: Row, expected:Row, columnNr: Int) extends DiffResult {
-  
-  override def toString = new StringBuffer()
-            .append("Actual line %d > %s <\n")
-            .append("Expected line %d > %s <\n")
-            .append(" Difference in field %d\n")
-            .append("  Actual   > %s <\n")
-            .append("  Expected > %s <\n\n")
-            .append("-----------------------------------------------\n").toString()
-            .format(actual.getRowNumber, actual.getFields.toString(),
-                expected.getRowNumber, expected.getFields.toString(),
-                columnNr,
-                actual.getField(columnNr),
-                expected.getField(columnNr))
-                
-  def toXml = <noMatchValue actualLine={actual.getRowNumber.toString}
-                  expectedLine={expected.getRowNumber.toString}
-                  actualValue={actual.getField(columnNr).toString}
-                  expectedValue={expected.getField(columnNr).toString}
-                  columnNr={columnNr.toString} />
-}
+  case class NoMatchValue(actual: Row, expected: Row, columnNr: Int) extends DiffResult {
 
-case class ExpectedRowNotExist(expected: Row) extends DiffResult {
-  
-  override def toString = new StringBuffer()
-            .append("Expected line %d does not exist > %s <\n\n")
-            .append("-----------------------------------------------\n").toString()
-            .format(expected.getRowNumber, expected.getFields.toString())
-                
-  def toXml = <expectedRowNotExist expectedLine={expected.getRowNumber.toString} />
-}
+    override def toString = new StringBuffer()
+      .append("Actual line %d > %s <\n")
+      .append("Expected line %d > %s <\n")
+      .append(" Difference in field %d\n")
+      .append("  Actual   > %s <\n")
+      .append("  Expected > %s <\n\n")
+      .append("-----------------------------------------------\n").toString()
+      .format(actual.getRowNumber, actual.getFields.toString(),
+        expected.getRowNumber, expected.getFields.toString(),
+        columnNr,
+        actual.getField(columnNr),
+        expected.getField(columnNr))
 
-case class UnexpectedRow(actual: Row) extends DiffResult {
-  
-  override def toString = new StringBuffer()
-            .append("Actual line %d is not expected > %s <\n\n")
-            .append("-----------------------------------------------\n").toString()
-            .format(actual.getRowNumber, actual.getFields.toString())
-            
-  def toXml = <unexpectedRow expectedLine={actual.getRowNumber.toString} />
-}
+    def toXml = <noMatchValue actualLine={ actual.getRowNumber.toString } expectedLine={ expected.getRowNumber.toString } actualValue={ actual.getField(columnNr).toString } expectedValue={ expected.getField(columnNr).toString } columnNr={ columnNr.toString }/>
+  }
 
-case class UniqueKeyViolation(file: File, key: List[Field[_]], rows: List[Row]) extends DiffResult {
-  
-  override def toString = new StringBuffer()
-           .append("Unique key violation in file %s\n")
-           .append("  lines with the same key > %s <\n")
-           .append("    %s\n\n")
-           .append("-----------------------------------------------\n").toString()
-            .format(file.toString(),
-                key.toString(),
-                rows.toString())
-  
-  def toXml = <uniqueKeyViolation file={file.toString()}
-                  key={key.toString()}
-                  rows={rows.toString()} />
-}
+  case class ExpectedRowNotExist(expected: Row) extends DiffResult {
+
+    override def toString = new StringBuffer()
+      .append("Expected line %d does not exist > %s <\n\n")
+      .append("-----------------------------------------------\n").toString()
+      .format(expected.getRowNumber, expected.getFields.toString())
+
+    def toXml = <expectedRowNotExist expectedLine={ expected.getRowNumber.toString }/>
+  }
+
+  case class UnexpectedRow(actual: Row) extends DiffResult {
+
+    override def toString = new StringBuffer()
+      .append("Actual line %d is not expected > %s <\n\n")
+      .append("-----------------------------------------------\n").toString()
+      .format(actual.getRowNumber, actual.getFields.toString())
+
+    def toXml = <unexpectedRow expectedLine={ actual.getRowNumber.toString }/>
+  }
+
+  case class UniqueKeyViolation(file: File, key: List[Field[_]], rows: List[Row]) extends DiffResult {
+
+    override def toString = new StringBuffer()
+      .append("Unique key violation in file %s\n")
+      .append("  lines with the same key > %s <\n")
+      .append("    %s\n\n")
+      .append("-----------------------------------------------\n").toString()
+      .format(file.toString(),
+        key.toString(),
+        rows.toString())
+
+    def toXml = <uniqueKeyViolation file={ file.toString() } key={ key.toString() } rows={ rows.toString() }/>
+  }
 
 }

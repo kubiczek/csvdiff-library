@@ -34,7 +34,7 @@ class LuncherTest extends FunSuite {
       """
     
     autoFile(actualContent)("actual-test") { f1 =>
-      autoFile(actualContent)("expected-test") { f2 =>
+      autoFile(expectedContent)("expected-test") { f2 =>
         CsvDiff.config.actualFile = f1
         CsvDiff.config.expectedFile = f2
         val result = CsvDiff.luncher.run()
@@ -54,7 +54,7 @@ class LuncherTest extends FunSuite {
       """
     
     autoFile(actualContent)("actual-test") { f1 =>
-      autoFile(actualContent)("expected-test") { f2 =>
+      autoFile(expectedContent)("expected-test") { f2 =>
         CsvDiff.config.actualFile = f1
         CsvDiff.config.expectedFile = f2
         val result = CsvDiff.luncher.run()

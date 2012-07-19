@@ -1,52 +1,60 @@
 package pl.kubiczek.csvdiff
 
-///**
-// * Factory for [[pl.kubiczek.csvdiff.Luncher]] instances.
-// * 
-// * @author kubiczek
-// */
-//object Luncher {
-//  /**
-//   * Creates luncher instance.
-//   * 
-//   * @return a new [[pl.kubiczek.csvdiff.Luncher]] instance.
-//   */
-//  def apply() = new Luncher(new CsvParser)
-//}
+import org.apache.log4j.Level
 
-/**
- * This class is used to lunch the csvdiff framework. Client code should 
- * call run() method.
- * 
- * @author kubiczek
- */
+import com.codahale.logula.Logging
 
 trait LuncherComponent { this: CsvParserComponent with TableComponent with ConfigurationComponent =>
 
   val luncher: Luncher
-  
-class Luncher(parser: CsvParser) {
+
   /**
-   * Runs csvdiff framework.
-   * 
-   * @return a list of [[pl.kubiczek.csvdiff.DiffResult]] instances representing
-   * differences in compared files.
+   * This class is used to lunch the csvdiff framework. Client code should
+   * call run() method.
+   *
+   * @author kubiczek
    */
-  def run() = {
-    val (actualTable, expectedTable) = parser.parse()
-    actualTable.compare(expectedTable)
+  class Luncher(parser: CsvParser) extends Logging {
+    /**
+     * Runs csvdiff framework.
+     *
+     * @return a list of [[pl.kubiczek.csvdiff.DiffResult]] instances representing
+     * differences in compared files.
+     */
+    def run() = {
+      log.info("CsvDiff is running...")
+      val (actualTable, expectedTable) = parser.parse()
+      actualTable.compare(expectedTable)
+    }
   }
 }
 
-}
+object CsvDiff extends LuncherComponent
+  with TableComponent
+  with RowComponent
+  with CsvParserComponent
+  with DiffResultComponent
+  with ConfigurationComponent {
 
-object CsvDiff extends LuncherComponent 
-    with TableComponent 
-    with RowComponent 
-    with CsvParserComponent 
-    with DiffResultComponent  
-    with ConfigurationComponent {
-  
   val config = new Configuration
   val luncher = new Luncher(new CsvParser)
+
+  Logging.configure { log =>
+    log.registerWithJMX = true
+
+    log.level = Level.TRACE
+
+    log.loggers("com.codahale.logula.examples.SilencedRunner") = Level.OFF
+
+    log.console.enabled = true
+    log.console.threshold = Level.ALL
+
+    log.file.enabled = true
+    log.file.filename = "./logs/example-logging-run.log"
+    log.file.threshold = Level.ALL
+
+    log.syslog.enabled = true
+    log.syslog.host = "localhost"
+    log.syslog.facility = "LOCAL7"
+  }
 }
