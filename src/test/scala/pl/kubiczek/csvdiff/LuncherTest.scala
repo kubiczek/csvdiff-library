@@ -8,11 +8,11 @@ import java.io.PrintWriter
 
 @RunWith(classOf[JUnitRunner])
 class LuncherTest extends FunSuite {
-  
+
   def autoFile[A](content: String = "")(filename: String)(body: File => A) = {
     val f = File.createTempFile(filename, ".csv")
     try {
-      if(content != "") {
+      if (content != "") {
         val out = new PrintWriter(f)
         out println content
         out close
@@ -22,7 +22,7 @@ class LuncherTest extends FunSuite {
       f delete
     }
   }
-  
+
   test("compare two identical files by using default config") {
     val actualContent =
       """
@@ -32,7 +32,7 @@ class LuncherTest extends FunSuite {
       """
       FIRST_NAME,SECOND_NAME,PROFESSION
       """
-    
+
     autoFile(actualContent)("actual-test") { f1 =>
       autoFile(expectedContent)("expected-test") { f2 =>
         CsvDiff.config.actualFile = f1
@@ -42,7 +42,7 @@ class LuncherTest extends FunSuite {
       }
     }
   }
-  
+
   test("compare two different files by using default config") {
     val actualContent =
       """
@@ -52,7 +52,7 @@ class LuncherTest extends FunSuite {
       """
       FIRST_NAME,SECOND_NAME,PROFESSION
       """
-    
+
     autoFile(actualContent)("actual-test") { f1 =>
       autoFile(expectedContent)("expected-test") { f2 =>
         CsvDiff.config.actualFile = f1
