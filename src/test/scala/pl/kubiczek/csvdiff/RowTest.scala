@@ -2,14 +2,20 @@ package pl.kubiczek.csvdiff
 
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
+import org.scalatest.BeforeAndAfter
 import org.scalatest.FunSuite
 
 @RunWith(classOf[JUnitRunner])
-class RowTest extends FunSuite with TestingEnvironment {
+class RowTest extends FunSuite with BeforeAndAfter with TestingEnvironment {
 
   val metadataArray = Array(mock[ColumnMetadata], mock[ColumnMetadata], mock[ColumnMetadata])
   val fields = Array(new Field("f1"), new Field("f2"), new Field("f3"))
   var row = new Row(10, fields, metadataArray)
+
+  before {
+    // reset mock object before test execution
+    org.easymock.EasyMock.reset(config)
+  }
 
   test("getField is called on row") {
     assert(row.getField(0) == new Field("f1"))
@@ -46,43 +52,79 @@ class RowTest extends FunSuite with TestingEnvironment {
     assert(row.length === 3)
   }
 
-//  test("compare in case rows are identical") {
-//    val row2 = row
-//    val result = row compare row2
-//
-//    assert(result.length === 0)
-//    assert(result === List())
-//  }
-//
-//  test("compare in case rows are not identical (1 difference)") {
-//    val fields = Array(new Field("f1"), new Field("f2"), new Field("f13"))
-//    val row2 = new Row(10, fields, metadataArray)
-//    val result = row compare row2
-//    assert(result.length === 1)
-//    result(0) match { // result.head
-//      case NoMatchValue(actual, expected, columnNr) =>
-//        assert(columnNr === 2)
-//        assert(actual === row)
-//        assert(expected === row2)
-//    }
-//  }
-//
-//  test("compare in case rows are not identical (2 differences)") {
-//    val fields = Array(new Field("f1"), new Field("f12"), new Field("f13"))
-//    val row2 = new Row(10, fields, metadataArray)
-//    val result = row compare row2
-//    assert(result.length === 2)
-//    result.head match { // result(0)
-//      case NoMatchValue(actual, expected, columnNr) =>
-//        assert(columnNr === 1)
-//        assert(actual === row)
-//        assert(expected === row2)
-//    }
-//    result(1) match {
-//      case NoMatchValue(actual, expected, columnNr) =>
-//        assert(columnNr === 2)
-//        assert(actual === row)
-//        assert(expected === row2)
-//    }
-//  }
+  test("compare in case rows are identical") {
+    expecting {
+      config.unimportantColumns.andReturn(Set())
+      lastCall.times(3)
+    }
+    whenExecuting(config) {
+      val row2 = row
+      val result = row compare row2
+      assert(result.length === 0)
+      assert(result === List())
+    }
+  }
+
+  test("compare in case rows are not identical (1 difference)") {
+    expecting {
+      config.unimportantColumns.andReturn(Set())
+      lastCall.times(3)
+    }
+    whenExecuting(config) {
+      val fields = Array(new Field("f1"), new Field("f2"), new Field("f13"))
+      val row2 = new Row(10, fields, metadataArray)
+      val result = row compare row2
+      assert(result.length === 1)
+      result(0) match {
+        case NoMatchValue(actual, expected, columnNr) =>
+          assert(columnNr === 2)
+          assert(actual === row)
+          assert(expected === row2)
+      }
+    }
+  }
+
+  test("compare in case rows are not identical (2 differences)") {
+    expecting {
+      config.unimportantColumns.andReturn(Set())
+      lastCall.times(3)
+    }
+    whenExecuting(config) {
+      val fields = Array(new Field("f1"), new Field("f12"), new Field("f13"))
+      val row2 = new Row(10, fields, metadataArray)
+      val result = row compare row2
+      assert(result.length === 2)
+      result.head match { // result(0)
+        case NoMatchValue(actual, expected, columnNr) =>
+          assert(columnNr === 1)
+          assert(actual === row)
+          assert(expected === row2)
+      }
+      result(1) match {
+        case NoMatchValue(actual, expected, columnNr) =>
+          assert(columnNr === 2)
+          assert(actual === row)
+          assert(expected === row2)
+      }
+    }
+  }
+
+  test("compare in case rows are not identical (2 differences but 1 is not important)") {
+    expecting {
+      config.unimportantColumns.andReturn(Set(2)) // third column is not important
+      lastCall.times(3)
+    }
+    whenExecuting(config) {
+      val fields = Array(new Field("f1"), new Field("f12"), new Field("f13"))
+      val row2 = new Row(10, fields, metadataArray)
+      val result = row compare row2
+      assert(result.length === 1)
+      result.head match { // result(0)
+        case NoMatchValue(actual, expected, columnNr) =>
+          assert(columnNr === 1)
+          assert(actual === row)
+          assert(expected === row2)
+      }
+    }
+  }
 }
