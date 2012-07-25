@@ -7,7 +7,7 @@ import java.io.File
 import java.io.PrintWriter
 
 @RunWith(classOf[JUnitRunner])
-class LuncherTest extends FunSuite {
+class LuncherIntegrationTest extends FunSuite {
 
   def autoFile[A](content: String = "")(filename: String)(body: File => A) = {
     val f = File.createTempFile(filename, ".csv")
