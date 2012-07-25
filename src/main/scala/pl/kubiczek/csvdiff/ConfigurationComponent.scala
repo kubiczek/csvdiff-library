@@ -1,18 +1,18 @@
 package pl.kubiczek.csvdiff
 import java.io.File
 
-/**
- * A configuration used by the csvdiff framework.
- *
- * Configuration instance specify all user-configurable parameters which
- * are used at runtime by the csvdiff framework.
- *
- * @author kubiczek
- */
 trait ConfigurationComponent {
 
   val config: Configuration
 
+  /**
+   * A configuration used by the csvdiff framework.
+   *
+   * Configuration instance specify all user-configurable parameters which
+   * are used at runtime by the csvdiff framework.
+   *
+   * @author kubiczek
+   */
   class Configuration {
     /**
      * Character used to separate values in CSV files. By default the values are

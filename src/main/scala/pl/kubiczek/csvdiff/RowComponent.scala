@@ -1,7 +1,6 @@
 package pl.kubiczek.csvdiff
 
 trait RowComponent { this: DiffResultComponent with ConfigurationComponent =>
-
   /**
    * This component represents a single line in input CSV file.
    *

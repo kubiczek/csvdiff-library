@@ -3,7 +3,6 @@ import java.io.File
 import com.codahale.logula.Logging
 
 trait TableComponent { this: RowComponent with DiffResultComponent with ConfigurationComponent =>
-
   /**
    * Factory for [[pl.kubiczek.csvdiff.Table]] instances.
    *
@@ -41,7 +40,6 @@ trait TableComponent { this: RowComponent with DiffResultComponent with Configur
       new Table(rows, columns)
     }
   }
-
   /**
    * This component is an data structure for representing input CSV file. Each
    * line of the file is represented by [[pl.kubiczek.csvdiff.Row]] instance.
