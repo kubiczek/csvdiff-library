@@ -11,5 +11,7 @@ class Column(columnNr: Int, fields: Array[_ <: Field[_]], metadata: ColumnMetada
   def getMetadata = this.metadata
   
   def length = this.fields.length
+  
+  override def toString = fields.toString()
 
 }
